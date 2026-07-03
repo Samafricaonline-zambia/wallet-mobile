@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "locker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/infinum/Locker.git",
+      "state" : {
+        "revision" : "45247dd1ab435d81ae2151fdb7f43d510d929f62",
+        "version" : "3.0.6"
+      }
+    },
+    {
+      "identity" : "newrelic-ios-agent-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/newrelic/newrelic-ios-agent-spm",
+      "state" : {
+        "revision" : "5274c522ef97d791d79a02d2eb8ae954364bc2a1",
+        "version" : "7.7.2"
+      }
+    }
+  ],
+  "version" : 2
+}
