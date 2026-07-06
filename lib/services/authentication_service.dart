@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sampay_wallet/core/constants/api_endpoints.dart';
 import 'package:sampay_wallet/core/extensions/general_extensions.dart';
@@ -23,7 +24,10 @@ class AuthenticationService extends ChangeNotifier {
 
   ValueNotifier<AuthenticationModel> credentials =
       ValueNotifier<AuthenticationModel>(
-        AuthenticationModel(phone: "", password: ""),
+        AuthenticationModel(
+          phone: kDebugMode ? "972801033" : "",
+          password: kDebugMode ? "prince123" : "",
+        ),
       );
 
   AuthenticationService();
