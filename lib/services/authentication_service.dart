@@ -25,8 +25,12 @@ class AuthenticationService extends ChangeNotifier {
   ValueNotifier<AuthenticationModel> credentials =
       ValueNotifier<AuthenticationModel>(
         AuthenticationModel(
-          phone: kDebugMode ? "972801033" : "",
-          password: kDebugMode ? "prince123" : "",
+          phone: kDebugMode
+              ? const String.fromEnvironment('DEBUG_PHONE', defaultValue: '')
+              : "",
+          password: kDebugMode
+              ? const String.fromEnvironment('DEBUG_PASSWORD', defaultValue: '')
+              : "",
         ),
       );
 

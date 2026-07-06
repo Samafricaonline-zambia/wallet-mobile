@@ -4,14 +4,19 @@ import 'package:sampay_wallet/core/widgets/simple_drop_down.dart';
 
 class TransferReasonDropDown extends StatefulWidget {
   final Function(int reasonIndex)? onChange;
-  const TransferReasonDropDown({super.key, this.onChange});
+  final int initialIndex;
+  const TransferReasonDropDown({
+    super.key,
+    this.onChange,
+    this.initialIndex = 0,
+  });
 
   @override
   State<TransferReasonDropDown> createState() => _TransferReasonDropDownState();
 }
 
 class _TransferReasonDropDownState extends State<TransferReasonDropDown> {
-  int selectedReasonIndex = 0;
+  late int selectedReasonIndex = widget.initialIndex;
 
   void updateSelectedIndex(int value) {
     setState(() {
