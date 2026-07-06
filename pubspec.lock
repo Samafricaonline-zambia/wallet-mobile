@@ -153,6 +153,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.9"
+  dart_dotenv:
+    dependency: "direct dev"
+    description:
+      name: dart_dotenv
+      sha256: "299c2b0358e4d1d50f0468c00f17ab206c770eb6380d1e3c1b9098b6d2ba7dbf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   dartz:
     dependency: "direct main"
     description:
@@ -254,6 +262,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_dotenv:
+    dependency: "direct main"
+    description:
+      name: flutter_dotenv
+      sha256: d41da11fb497314fbf89811ec30af02d1d898b47980a129f0a8c0a1720460ba2
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.1"
   flutter_hooks:
     dependency: "direct main"
     description:

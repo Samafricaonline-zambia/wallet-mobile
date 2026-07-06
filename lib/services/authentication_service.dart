@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sampay_wallet/core/constants/api_endpoints.dart';
 import 'package:sampay_wallet/core/extensions/general_extensions.dart';
 import 'package:sampay_wallet/core/models/authentication_model.dart';
@@ -25,12 +26,8 @@ class AuthenticationService extends ChangeNotifier {
   ValueNotifier<AuthenticationModel> credentials =
       ValueNotifier<AuthenticationModel>(
         AuthenticationModel(
-          phone: kDebugMode
-              ? const String.fromEnvironment('DEBUG_PHONE', defaultValue: '')
-              : "",
-          password: kDebugMode
-              ? const String.fromEnvironment('DEBUG_PASSWORD', defaultValue: '')
-              : "",
+          phone: kDebugMode ? (dotenv.env['DEBUG_PHONE'] ?? '') : "",
+          password: kDebugMode ? (dotenv.env['DEBUG_PASSWORD'] ?? '') : "",
         ),
       );
 
