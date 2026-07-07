@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:sampay_wallet/core/constants/app_icons.dart';
+import 'package:sampay_wallet/core/constants/international_payments.dart';
 import 'package:sampay_wallet/core/services/configure_dependencies.dart';
 import 'package:sampay_wallet/core/utils/app_utils.dart';
+import 'package:sampay_wallet/core/utils/string_utils.dart';
 import 'package:sampay_wallet/core/validations/validations.dart';
 import 'package:sampay_wallet/core/widgets/empty_space.dart';
 import 'package:sampay_wallet/core/widgets/simple_form.dart';
 import 'package:sampay_wallet/core/widgets/simple_section_title.dart';
 import 'package:sampay_wallet/core/widgets/simple_text_field.dart';
-import 'package:sampay_wallet/core/widgets/simple_toast.dart';
 import 'package:sampay_wallet/features/international_payments/models/payment_request_model.dart';
 import 'package:sampay_wallet/features/international_payments/services/international_payments_service.dart';
+import 'package:sampay_wallet/features/international_payments/widgets/reason_dropdown.dart';
 import 'package:watch_it/watch_it.dart';
 
 class MobileWalletForm extends StatelessWidget with WatchItMixin {
@@ -30,8 +32,25 @@ class MobileWalletForm extends StatelessWidget with WatchItMixin {
       currentRequest.receivercountry,
     );
 
+    void handleTransferPurposeChange(int index) {
+      final selectedPurpose = InternationalPaymentsConstants.getPurposeByIndex(
+        index,
+      );
+
+      internationalPaymentsService.updateCurrentPaymentRequest(
+        currentRequest.copyWith(
+          senderreportcode: selectedPurpose.code,
+          senderreason: selectedPurpose.reason,
+          senderreasonindex: index,
+        ),
+      );
+    }
+
     void handleSubmit() async {
-      // Make it async
+      if (currentRequest.senderreportcode.isEmpty) {
+        handleTransferPurposeChange(0);
+      }
+
       // verify details
       final value = await internationalPaymentsService.verifyReceiver(
         currentRequest.copyWith(
@@ -40,10 +59,6 @@ class MobileWalletForm extends StatelessWidget with WatchItMixin {
           ),
         ),
       );
-
-      if (value) {
-        debugPrint(currentRequest.toJson());
-      }
 
       onSubmit?.call(value);
     }
@@ -101,21 +116,22 @@ class MobileWalletForm extends StatelessWidget with WatchItMixin {
               ),
         ),
         EmptySpace.small(),
-        SimpleTextField(
-          labelText: "Purpose",
-          icon: AppIcons.notes,
-          initialValue: currentRequest.senderreason,
-          keyboardType: .text,
-          validator: (v) => AppValidations.validateNotNone(
-            v,
-            message: "Enter appropriate reason for transfer",
-          ),
-          onChanged: (value) =>
-              internationalPaymentsService.updateCurrentPaymentRequest(
-                currentRequest.copyWith(senderreason: value),
-              ),
-          messageText: "Reason for sending money",
-        ),
+        TransferReasonDropDown(onChange: handleTransferPurposeChange),
+        // SimpleTextField(
+        //   labelText: "Purpose",
+        //   icon: AppIcons.notes,
+        //   initialValue: currentRequest.senderreason,
+        //   keyboardType: .text,
+        //   validator: (v) => AppValidations.validateNotNone(
+        //     v,
+        //     message: "Enter appropriate reason for transfer",
+        //   ),
+        //   onChanged: (value) =>
+        //       internationalPaymentsService.updateCurrentPaymentRequest(
+        //         currentRequest.copyWith(senderreason: value),
+        //       ),
+        //   messageText: "Reason for sending money",
+        // ),
         EmptySpace(),
         SimpleSectionTitle(
           title: "Receiver details",

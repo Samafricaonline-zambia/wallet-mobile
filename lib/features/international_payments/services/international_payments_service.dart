@@ -63,7 +63,7 @@ class InternationalPaymentsService extends ChangeNotifier {
         creditAccountPrefix =
             StringUtils.areEqual(
               request.receivercountry,
-              InternationalPaymentsConstants.southAfrica,
+              InternationalPaymentsConstants.southAfrica.subTitle,
             )
             ? "+27-"
             : "+263-";
@@ -119,7 +119,7 @@ class InternationalPaymentsService extends ChangeNotifier {
         creditAccountPrefix =
             StringUtils.areEqual(
               request.receivercountry,
-              InternationalPaymentsConstants.southAfrica,
+              InternationalPaymentsConstants.southAfrica.subTitle,
             )
             ? "+27-"
             : "+263-";
@@ -156,6 +156,8 @@ class InternationalPaymentsService extends ChangeNotifier {
         payload["creditaccount"] = request.creditaccount;
         payload["receiveraccount"] = request.creditaccount;
       }
+
+      debugPrint(payload.toJson);
 
       final NetworkResponse response = await networkService.post(
         InternationalPaymentsEndpoints.paymentRequest,

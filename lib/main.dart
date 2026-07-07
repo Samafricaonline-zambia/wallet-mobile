@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sampay_wallet/core/constants/new_relic_config.dart';
 import 'package:sampay_wallet/core/routes/app_router.dart';
@@ -10,6 +11,9 @@ import 'package:sampay_wallet/services/app_state_service.dart';
 void main() async {
   // 1. Ensure Flutter binding is initialized FIRST
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load .env file
+  await dotenv.load(fileName: ".env");
 
   // 2. Set preferred orientations
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

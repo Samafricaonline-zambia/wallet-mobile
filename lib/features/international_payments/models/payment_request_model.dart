@@ -14,6 +14,7 @@ class InternationalPaymentsRequestModel {
   final String senderreportcode;
   final String senderreason;
   final String accountType;
+  final int senderreasonindex; // New property
 
   InternationalPaymentsRequestModel({
     required this.spid,
@@ -29,6 +30,7 @@ class InternationalPaymentsRequestModel {
     required this.senderreportcode,
     required this.senderreason,
     required this.accountType,
+    this.senderreasonindex = 0, // Added to constructor
   });
 
   InternationalPaymentsRequestModel copyWith({
@@ -45,6 +47,7 @@ class InternationalPaymentsRequestModel {
     String? senderreportcode,
     String? senderreason,
     String? accountType,
+    int? senderreasonindex, // Added to copyWith
   }) {
     return InternationalPaymentsRequestModel(
       spid: spid ?? this.spid,
@@ -60,6 +63,7 @@ class InternationalPaymentsRequestModel {
       senderreportcode: senderreportcode ?? this.senderreportcode,
       senderreason: senderreason ?? this.senderreason,
       accountType: accountType ?? this.accountType,
+      senderreasonindex: senderreasonindex ?? this.senderreasonindex,
     );
   }
 
@@ -78,6 +82,7 @@ class InternationalPaymentsRequestModel {
         senderreportcode: "",
         senderreason: "",
         accountType: "",
+        senderreasonindex: 0, // Default value for empty
       );
 
   Map<String, dynamic> toMap() {
@@ -95,6 +100,7 @@ class InternationalPaymentsRequestModel {
       'senderreportcode': senderreportcode,
       'senderreason': senderreason,
       'accountType': accountType,
+      'senderreasonindex': senderreasonindex, // Added to map
     };
   }
 
@@ -113,6 +119,7 @@ class InternationalPaymentsRequestModel {
       senderreportcode: map['senderreportcode'] ?? '',
       senderreason: map['senderreason'] ?? '',
       accountType: map['accountType'] ?? '',
+      senderreasonindex: map['senderreasonindex'] ?? 0, // Added to fromMap
     );
   }
 
@@ -123,7 +130,7 @@ class InternationalPaymentsRequestModel {
 
   @override
   String toString() {
-    return 'InternationalPaymentsRequestModel(spid: $spid, amount: $amount, receiverfullname: $receiverfullname, receiveraddress: $receiveraddress, receiverpostcode: $receiverpostcode, receivertown: $receivertown, receivercountry: $receivercountry, creditaccount: $creditaccount, senderfullname: $senderfullname, debtoraccount: $debtoraccount, senderreportcode: $senderreportcode, senderreason: $senderreason, accountType: $accountType)';
+    return 'InternationalPaymentsRequestModel(spid: $spid, amount: $amount, receiverfullname: $receiverfullname, receiveraddress: $receiveraddress, receiverpostcode: $receiverpostcode, receivertown: $receivertown, receivercountry: $receivercountry, creditaccount: $creditaccount, senderfullname: $senderfullname, debtoraccount: $debtoraccount, senderreportcode: $senderreportcode, senderreason: $senderreason, accountType: $accountType, senderreasonindex: $senderreasonindex)';
   }
 
   @override
@@ -143,7 +150,8 @@ class InternationalPaymentsRequestModel {
         other.debtoraccount == debtoraccount &&
         other.senderreportcode == senderreportcode &&
         other.senderreason == senderreason &&
-        other.accountType == accountType;
+        other.accountType == accountType &&
+        other.senderreasonindex == senderreasonindex; // Added to equality
   }
 
   @override
@@ -160,6 +168,7 @@ class InternationalPaymentsRequestModel {
         debtoraccount.hashCode ^
         senderreportcode.hashCode ^
         senderreason.hashCode ^
-        accountType.hashCode;
+        accountType.hashCode ^
+        senderreasonindex.hashCode; // Added to hash
   }
 }

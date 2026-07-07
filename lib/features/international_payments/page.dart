@@ -8,11 +8,13 @@ import 'package:sampay_wallet/features/international_payments/models/payment_req
 import 'package:sampay_wallet/features/international_payments/services/international_payments_service.dart';
 import 'package:sampay_wallet/features/international_payments/widgets/countries_list.dart';
 import 'package:sampay_wallet/features/transfer_payment/services/wallet_transfer_service.dart';
+import 'package:sampay_wallet/services/app_state_service.dart';
 import 'package:sampay_wallet/services/wallet_service.dart';
 import 'package:watch_it/watch_it.dart';
 
 class InternationalPaymentsPage extends StatelessWidget with WatchItMixin {
   final WalletService walletService = getIt<WalletService>();
+  final AppStateService appState = getIt<AppStateService>();
   final InternationalPaymentsService internationalPaymentsService =
       getIt<InternationalPaymentsService>();
   final WalletTransferService transferService = getIt<WalletTransferService>();
@@ -25,13 +27,26 @@ class InternationalPaymentsPage extends StatelessWidget with WatchItMixin {
 
       switch (InternationalPaymentsConstants.countries[optionIndex].badgeText) {
         case "Mobile Wallet":
-          internationalPaymentsService.updateCurrentPaymentRequest(newRequest);
+          internationalPaymentsService.updateCurrentPaymentRequest(
+            newRequest.copyWith(
+              debtoraccount: appState.phoneNumber,
+              spid: InternationalPaymentsConstants.southAfrica.id,
+              receivercountry:
+                  InternationalPaymentsConstants.southAfrica.subTitle,
+            ),
+          );
           context.push(AppRoutes.internationalMobileWalletPayments);
           break;
 
         default:
           internationalPaymentsService.updateCurrentPaymentRequest(
-            newRequest.copyWith(accountType: "bank"),
+            newRequest.copyWith(
+              accountType: "bank",
+              debtoraccount: appState.phoneNumber,
+              spid: InternationalPaymentsConstants.southAfrica.id,
+              receivercountry:
+                  InternationalPaymentsConstants.southAfrica.subTitle,
+            ),
           );
           context.push(AppRoutes.internationalBankPayments);
           break;
