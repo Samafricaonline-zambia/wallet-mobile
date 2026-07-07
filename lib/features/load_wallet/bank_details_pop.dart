@@ -56,7 +56,7 @@ class BankDetailsAndPopPage extends StatelessWidget with WatchItMixin {
         BankDepositModel.empty().copyWith(
           bankref: appState.phoneNumber,
           depositamount: 1.0,
-          depositbank: bank.name.split(" ")[0],
+          depositbank: bank.name.split(" ")[0].toUpperCase(),
           depositdate: AppUtils().formatDate(DateTime.now().toIso8601String()),
         ),
       );
