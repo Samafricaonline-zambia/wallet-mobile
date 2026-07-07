@@ -92,7 +92,18 @@ class LoginPage extends StatelessWidget with WatchItMixin {
                 "Signup now",
                 color: AppTheme.currentTheme.colorScheme.primary,
               ).onTap(() {
-                context.push(AppRoutes.registration);
+                //context.push(AppRoutes.registration);
+                context.push(
+                  AppRoutes.webview,
+                  extra: {
+                    'url':
+                        "https://samafricaonline.com/sam_pay/public/register",
+                    'title': "Sampay Sign-up",
+                    'exitOn':
+                        "https://samafricaonline.com/sam_pay/public/login",
+                    "exitTo": AppRoutes.login,
+                  },
+                );
               }),
             ],
           ),
