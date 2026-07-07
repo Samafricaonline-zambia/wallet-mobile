@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sampay_wallet/core/constants/assets.dart';
 import 'package:sampay_wallet/core/constants/constants.dart';
-import 'package:sampay_wallet/core/extensions/widget_extensions.dart';
 import 'package:sampay_wallet/core/models/wallet_transactions_model.dart';
 import 'package:sampay_wallet/core/themes/color_constants.dart';
 import 'package:sampay_wallet/core/utils/app_utils.dart';
@@ -19,69 +17,6 @@ class TransactionTile extends StatelessWidget {
   const TransactionTile({super.key, required this.transaction, this.onClick});
 
   Widget getLeadingImage(Color bgColor) {
-    // if (transaction.vendor != null) {
-    //   List<String> vendorSegments = (transaction.vendor ?? "").split(" ");
-    //   BillMerchants merchant = AppUtils().getMerchant(vendorSegments[0]);
-
-    //   String assetPath = AppAssets.logo;
-
-    //   switch (merchant) {
-    //     case BillMerchants.airtel:
-    //       assetPath = AppAssets.airtel;
-    //       break;
-
-    //     case BillMerchants.boxOffice:
-    //       assetPath = AppAssets.boxOffice;
-    //       break;
-
-    //     case BillMerchants.dstv:
-    //       assetPath = AppAssets.dstv;
-    //       break;
-
-    //     case BillMerchants.gotv:
-    //       assetPath = AppAssets.gotv;
-    //       break;
-
-    //     case BillMerchants.liquid:
-    //       assetPath = AppAssets.liquid;
-    //       break;
-
-    //     case BillMerchants.mtn:
-    //       assetPath = AppAssets.mtn;
-    //       break;
-
-    //     case BillMerchants.topStar:
-    //       assetPath = AppAssets.topStar;
-    //       break;
-
-    //     case BillMerchants.zamtel:
-    //       assetPath = AppAssets.zamtel;
-    //       break;
-
-    //     case BillMerchants.zesco:
-    //       assetPath = AppAssets.zesco;
-    //       break;
-
-    //     default:
-    //       assetPath = AppAssets.logo;
-    //       break;
-    //   }
-
-    //   if (assetPath.isNotEmpty) {
-    //     // return Container(
-    //     //   height: 50,
-    //     //   width: 50,
-    //     //   padding: EdgeInsets.all(5),
-    //     //   decoration: BoxDecoration(
-    //     //     color: bgColor,
-    //     //     borderRadius: BorderRadius.circular(15),
-    //     //   ),
-    //     //   child: Image(image: AssetImage(assetPath)),
-    //     // );
-    //     SimpleImageCard(image: assetPath);
-    //   }
-    // }
-
     return SimpleImageCard(
       image: AppUtils().getMerchantAssetImage(transaction.vendor ?? ""),
     );

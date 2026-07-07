@@ -4,7 +4,6 @@ import 'package:sampay_wallet/core/constants/constants.dart';
 import 'package:sampay_wallet/core/layouts/options_layout.dart';
 import 'package:sampay_wallet/core/models/dialog_option_model.dart';
 import 'package:sampay_wallet/core/models/institutions.dart';
-import 'package:sampay_wallet/core/models/kyc_and_charges_model.dart';
 import 'package:sampay_wallet/core/models/load_wallet_models/momo.dart';
 import 'package:sampay_wallet/core/models/payment_request_model.dart';
 import 'package:sampay_wallet/core/services/configure_dependencies.dart';
