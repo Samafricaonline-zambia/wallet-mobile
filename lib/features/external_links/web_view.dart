@@ -24,7 +24,7 @@ class _ExternalWebViewState extends State<ExternalWebView> {
   String? _title;
   String? _exitOn;
   late String _exitTo;
-  String? _currentUrl; // Track current URL
+  bool _hasExited = false;
 
   void handleError(dynamic error) {
     if (mounted && isLoading) {
@@ -38,10 +38,28 @@ class _ExternalWebViewState extends State<ExternalWebView> {
   }
 
   // Check if we should exit based on current URL
+  bool _matchesExitUrl(String url) {
+    final exitOn = _exitOn;
+    if (exitOn == null || exitOn.isEmpty || _hasExited) return false;
+
+    final current = Uri.tryParse(url);
+    final target = Uri.tryParse(exitOn);
+    if (current == null || target == null) return false;
+
+    return current.scheme == target.scheme &&
+        current.host == target.host &&
+        current.path == target.path &&
+        (target.query.isEmpty || current.query == target.query);
+  }
+
+  // Check if we should exit based on current URL
   void _checkExitCondition(String url) {
-    if (_exitOn != null && _exitOn!.isNotEmpty && url.contains(_exitOn!)) {
+    if (_matchesExitUrl(url)) {
       debugPrint('Exit condition met! URL: $url contains: $_exitOn');
 
+      setState(() {
+        _hasExited = true;
+      });
       // Show a success toast or message
       if (mounted && context.canPop() && _exitTo.isEmpty) {
         context.pop();
@@ -63,7 +81,6 @@ class _ExternalWebViewState extends State<ExternalWebView> {
           onPageStarted: (url) {
             setState(() {
               isLoading = true;
-              _currentUrl = url;
             });
 
             // Check exit condition on page start
@@ -72,7 +89,6 @@ class _ExternalWebViewState extends State<ExternalWebView> {
           onPageFinished: (url) {
             setState(() {
               isLoading = false;
-              _currentUrl = url;
             });
 
             // Check exit condition on page finish (in case of redirects)
@@ -82,10 +98,6 @@ class _ExternalWebViewState extends State<ExternalWebView> {
             // This is the most reliable way to monitor URL changes
             final url = change.url;
             if (url != null) {
-              setState(() {
-                _currentUrl = url;
-              });
-
               // Check exit condition on URL change
               _checkExitCondition(url);
             }
