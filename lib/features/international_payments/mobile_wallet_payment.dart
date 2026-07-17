@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sampay_wallet/core/constants/constants.dart';
-import 'package:sampay_wallet/core/constants/international_payments.dart';
 import 'package:sampay_wallet/core/constants/transfers/transfer_confirmation_messages.dart';
 import 'package:sampay_wallet/core/layouts/options_layout.dart';
 import 'package:sampay_wallet/core/services/configure_dependencies.dart';

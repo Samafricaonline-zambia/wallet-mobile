@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sampay_wallet/core/constants/api_endpoints.dart';
 import 'package:sampay_wallet/core/constants/international_payments.dart';
 import 'package:sampay_wallet/core/extensions/general_extensions.dart';
@@ -15,7 +15,9 @@ class InternationalPaymentsService extends ChangeNotifier {
   late AppStateService appState;
   late AppLoaderService appLoaderService;
   //late String accessToken;
-  final String uatAddress = "https://sampay.dev/uat/tcib";
+  final String uatAddress = "https://sampay.dev/uat/";
+  final String prodAddress = "https://sampay.dev/api/tcib";
+
   ValueNotifier<InternationalPaymentsRequestModel> currentPaymentRequest =
       ValueNotifier<InternationalPaymentsRequestModel>(
         InternationalPaymentsRequestModel.empty(),
@@ -40,13 +42,33 @@ class InternationalPaymentsService extends ChangeNotifier {
 
       final NetworkResponse response = await networkService.get(
         InternationalPaymentsEndpoints.healthCheck,
-        baseAddress: uatAddress,
+        baseAddress: kDebugMode ? uatAddress : prodAddress,
         bearerToken: appState.accessToken,
       );
 
       return response.isSuccess;
     } catch (e) {
       return false;
+    } finally {
+      appLoaderService.updateIsLoading(false);
+    }
+  }
+
+  Future<String> verifyTpin() async {
+    try {
+      appLoaderService.updateIsLoading(true);
+      //checkAccessToken();
+
+      final NetworkResponse response = await networkService.post(
+        InternationalPaymentsEndpoints.verifyTpin,
+        baseAddress: kDebugMode ? uatAddress : prodAddress,
+        bearerToken: appState.accessToken,
+        body: {},
+      );
+
+      return response.displayMessage;
+    } catch (e) {
+      return e.toString();
     } finally {
       appLoaderService.updateIsLoading(false);
     }
@@ -95,7 +117,7 @@ class InternationalPaymentsService extends ChangeNotifier {
 
       final NetworkResponse response = await networkService.post(
         InternationalPaymentsEndpoints.verifyAccount,
-        baseAddress: uatAddress,
+        baseAddress: kDebugMode ? uatAddress : prodAddress,
         bearerToken: appState.accessToken,
         jsonBody: payload.toJson,
       );
@@ -161,7 +183,7 @@ class InternationalPaymentsService extends ChangeNotifier {
 
       final NetworkResponse response = await networkService.post(
         InternationalPaymentsEndpoints.paymentRequest,
-        baseAddress: uatAddress,
+        baseAddress: kDebugMode ? uatAddress : prodAddress,
         bearerToken: appState.accessToken,
         jsonBody: payload.toJson,
       );

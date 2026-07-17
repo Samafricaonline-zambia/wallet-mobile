@@ -48,4 +48,5 @@ class InternationalPaymentsEndpoints {
   static const String verifyAccount = "/verification";
   static const String paymentRequest = "/payment";
   static const String returnPayment = "/payment_return";
+  static const String verifyTpin = "/zra/confirm_lookup";
 }

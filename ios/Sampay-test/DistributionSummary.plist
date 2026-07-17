@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Sampay.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>46</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>B18AC8C463CF13D82591D30D167EEAB2A09B88AC</string>
+				<key>dateExpires</key>
+				<string>14/07/2027</string>
+				<key>type</key>
+				<string>Cloud Managed Apple Distribution</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1.0</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>B18AC8C463CF13D82591D30D167EEAB2A09B88AC</string>
+						<key>dateExpires</key>
+						<string>14/07/2027</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>App.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>75588MZ82P</string>
+						<key>name</key>
+						<string>AMIT BANSILAL DUBEY</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1.0</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>B18AC8C463CF13D82591D30D167EEAB2A09B88AC</string>
+						<key>dateExpires</key>
+						<string>14/07/2027</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>Flutter.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>75588MZ82P</string>
+						<key>name</key>
+						<string>AMIT BANSILAL DUBEY</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>7.7.4</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>B18AC8C463CF13D82591D30D167EEAB2A09B88AC</string>
+						<key>dateExpires</key>
+						<string>14/07/2027</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>NewRelic.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>75588MZ82P</string>
+						<key>name</key>
+						<string>AMIT BANSILAL DUBEY</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>7.7.4</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1.0</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>B18AC8C463CF13D82591D30D167EEAB2A09B88AC</string>
+						<key>dateExpires</key>
+						<string>14/07/2027</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>objective_c.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>75588MZ82P</string>
+						<key>name</key>
+						<string>AMIT BANSILAL DUBEY</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0</string>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>75588MZ82P.com.samafricaonline.sampay</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>75588MZ82P</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>Runner.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>f7f5ae67-2302-4b55-a361-e6a53da49b79</string>
+				<key>dateExpires</key>
+				<string>14/07/2027</string>
+				<key>name</key>
+				<string>iOS Team Ad Hoc Provisioning Profile: com.samafricaonline.sampay</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>75588MZ82P</string>
+				<key>name</key>
+				<string>AMIT BANSILAL DUBEY</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>45.0.2</string>
+		</dict>
+	</array>
+</dict>
+</plist>

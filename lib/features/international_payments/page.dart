@@ -4,6 +4,8 @@ import 'package:sampay_wallet/core/constants/international_payments.dart';
 import 'package:sampay_wallet/core/layouts/options_layout.dart';
 import 'package:sampay_wallet/core/routes/app_router.dart';
 import 'package:sampay_wallet/core/services/configure_dependencies.dart';
+import 'package:sampay_wallet/core/utils/app_utils.dart';
+import 'package:sampay_wallet/core/widgets/simple_toast.dart';
 import 'package:sampay_wallet/features/international_payments/models/payment_request_model.dart';
 import 'package:sampay_wallet/features/international_payments/services/international_payments_service.dart';
 import 'package:sampay_wallet/features/international_payments/widgets/countries_list.dart';
@@ -22,8 +24,18 @@ class InternationalPaymentsPage extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    void handleOptionClick(int optionIndex) {
+    void handleOptionClick(int optionIndex) async {
       final newRequest = InternationalPaymentsRequestModel.empty();
+
+      final responseMessage = await internationalPaymentsService.verifyTpin();
+
+      if (responseMessage.isNotEmpty && AppUtils().isContextValid(context)) {
+        SimpleToast.showErrorToast(
+          "Failed to validate tpin. $responseMessage",
+          context,
+        );
+        return;
+      }
 
       switch (InternationalPaymentsConstants.countries[optionIndex].badgeText) {
         case "Mobile Wallet":
