@@ -11,9 +11,14 @@ class DefaultBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget createChild() {
       return Container(
+        padding: EdgeInsets.only(
+          bottom: AppUtils().isKeyboardOpen(context)
+              ? AppUtils().getKeyboardHeight(context)
+              : 0,
+        ),
         width: AppUtils().getScreenWidth(context),
         height: height,
-        decoration: AppDecorations.primary(),
+        decoration: AppDecorations.white(),
         child: SingleChildScrollView(child: child),
       );
     }

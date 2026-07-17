@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sampay_wallet/core/extensions/widget_extensions.dart';
 import 'package:sampay_wallet/core/utils/app_utils.dart';
 import 'package:sampay_wallet/core/widgets/empty_space.dart';
 import 'package:sampay_wallet/core/widgets/simple_buttons.dart';
@@ -88,6 +89,8 @@ class _SimpleFormState extends State<SimpleForm> {
           buildAction(),
         ],
       ),
-    );
+    ).onTap(() {
+      AppUtils().hideKeyboard(context);
+    });
   }
 }

@@ -34,6 +34,14 @@ class AppUtils {
   double getScreenHeight(BuildContext context, {int division = 1}) =>
       MediaQuery.of(context).size.height / division;
 
+  bool isKeyboardOpen(BuildContext context) {
+    return MediaQuery.of(context).viewInsets.bottom > 0;
+  }
+
+  double getKeyboardHeight(BuildContext context) {
+    return MediaQuery.of(context).viewInsets.bottom;
+  }
+
   /// Hides the keyboard by removing focus from the current focus node
   ///
   /// Parameters:
