@@ -73,7 +73,7 @@ class NetworkService extends ChangeNotifier {
   };
   ValueNotifier<bool> isNetworkConnected = ValueNotifier<bool>(true);
 
-  String buildUrl(String endpoint) => '$baseUrl$endpoint';
+  String buildUrl(String endpoint) => _joinUrl(baseUrl, endpoint);
 
   NetworkService({String? url}) {
     // Create HTTP client with SSL certificate handling
@@ -122,6 +122,90 @@ class NetworkService extends ChangeNotifier {
     return http_io.IOClient(httpClient);
   }
 
+  // ======================= DEBUG LOGGING =======================
+
+  /// Logs an outgoing request in debug mode.
+  ///
+  /// The Authorization header is masked so bearer tokens are never
+  /// written to the console/logs.
+  void _logRequest({
+    required String method,
+    required String url,
+    required Map<String, String> headers,
+    String? body,
+  }) {
+    if (!kDebugMode) return;
+
+    debugPrint('🌐 [HTTP] $method → $url');
+    debugPrint('📋 [HEADERS] ${_maskSensitiveHeaders(headers)}');
+    if (body != null && body.isNotEmpty) {
+      debugPrint('📦 [BODY] $body');
+    }
+  }
+
+  /// Logs a received response (or error) in debug mode.
+  void _logResponse({
+    required String method,
+    required String url,
+    int? statusCode,
+    Map<String, String>? headers,
+    String? body,
+    Object? error,
+  }) {
+    if (!kDebugMode) return;
+
+    if (error != null) {
+      debugPrint('❌ [HTTP] $method ← $url ERROR: $error');
+      return;
+    }
+
+    debugPrint('📥 [HTTP] $method ← $url [${statusCode ?? '?'}]');
+    if (headers != null && headers.isNotEmpty) {
+      debugPrint('🔖 [RESPONSE HEADERS] $headers');
+    }
+    if (body != null && body.isNotEmpty) {
+      debugPrint('📄 [RESPONSE BODY] $body');
+    }
+  }
+
+  /// Masks sensitive header values (e.g. Authorization bearer tokens)
+  /// so they don't leak into debug logs.
+  Map<String, String> _maskSensitiveHeaders(Map<String, String> headers) {
+    final masked = <String, String>{};
+    headers.forEach((key, value) {
+      if (key.toLowerCase() == 'authorization') {
+        masked[key] = value.length > 12
+            ? '${value.substring(0, 12)}...'
+            : '*** (masked)';
+      } else {
+        masked[key] = value;
+      }
+    });
+    return masked;
+  }
+
+  /// Joins a base URL and an endpoint, avoiding duplicate slashes between
+  /// them (e.g. `https://host/uat/` + `/zra/...` → `https://host/uat/zra/...`).
+  ///
+  /// Prevents servers from responding with a 308 redirect for `//` paths.
+  /// Absolute endpoint URLs (starting with http:// or https://) are returned
+  /// unchanged.
+  String _joinUrl(String base, String endpoint) {
+    // Endpoint is already a full URL — use it as-is.
+    if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+      return endpoint;
+    }
+
+    final normalizedBase = base.endsWith('/')
+        ? base.substring(0, base.length - 1)
+        : base;
+    final normalizedEndpoint = endpoint.startsWith('/')
+        ? endpoint
+        : '/$endpoint';
+
+    return '$normalizedBase$normalizedEndpoint';
+  }
+
   // GET request
   Future<NetworkResponse> get(
     String endpoint, {
@@ -130,19 +214,33 @@ class NetworkService extends ChangeNotifier {
     Map<String, dynamic>? queryParameters,
     String? bearerToken,
   }) async {
+    const method = 'GET';
     try {
-      final uri = Uri.parse('${baseAddress ?? baseUrl}$endpoint').replace(
+      final uri = Uri.parse(_joinUrl(baseAddress ?? baseUrl, endpoint)).replace(
         queryParameters: queryParameters?.map(
           (key, value) => MapEntry(key, value.toString()),
         ),
       );
+      final mergedHeaders = _mergeHeaders(headers, bearerToken);
 
-      final response = await client.get(
-        uri,
-        headers: _mergeHeaders(headers, bearerToken),
+      _logRequest(method: method, url: uri.toString(), headers: mergedHeaders);
+
+      final response = await client.get(uri, headers: mergedHeaders);
+
+      _logResponse(
+        method: method,
+        url: uri.toString(),
+        statusCode: response.statusCode,
+        headers: response.headers,
+        body: response.body,
       );
       return NetworkResponse.fromHttpResponse(response);
     } catch (e) {
+      _logResponse(
+        method: method,
+        url: _joinUrl(baseAddress ?? baseUrl, endpoint),
+        error: e,
+      );
       return NetworkResponse.error(message: e.toString());
     }
   }
@@ -156,16 +254,39 @@ class NetworkService extends ChangeNotifier {
     String? jsonBody,
     String? bearerToken,
   }) async {
+    const method = 'POST';
     try {
-      final uri = Uri.parse('${baseAddress ?? baseUrl}$endpoint');
+      final uri = Uri.parse(_joinUrl(baseAddress ?? baseUrl, endpoint));
+      final mergedHeaders = _mergeHeaders(headers, bearerToken);
+      final encodedBody = jsonBody ?? (body != null ? jsonEncode(body) : null);
+
+      _logRequest(
+        method: method,
+        url: uri.toString(),
+        headers: mergedHeaders,
+        body: encodedBody,
+      );
 
       final response = await client.post(
         uri,
-        headers: _mergeHeaders(headers, bearerToken),
-        body: jsonBody ?? (body != null ? jsonEncode(body) : null),
+        headers: mergedHeaders,
+        body: encodedBody,
+      );
+
+      _logResponse(
+        method: method,
+        url: uri.toString(),
+        statusCode: response.statusCode,
+        headers: response.headers,
+        body: response.body,
       );
       return NetworkResponse.fromHttpResponse(response);
     } catch (e) {
+      _logResponse(
+        method: method,
+        url: _joinUrl(baseAddress ?? baseUrl, endpoint),
+        error: e,
+      );
       return NetworkResponse.error(message: e.toString());
     }
   }
@@ -179,16 +300,39 @@ class NetworkService extends ChangeNotifier {
     String? jsonBody,
     String? bearerToken,
   }) async {
+    const method = 'PUT';
     try {
-      final uri = Uri.parse('${baseAddress ?? baseUrl}$endpoint');
+      final uri = Uri.parse(_joinUrl(baseAddress ?? baseUrl, endpoint));
+      final mergedHeaders = _mergeHeaders(headers, bearerToken);
+      final encodedBody = jsonBody ?? (body != null ? jsonEncode(body) : null);
+
+      _logRequest(
+        method: method,
+        url: uri.toString(),
+        headers: mergedHeaders,
+        body: encodedBody,
+      );
 
       final response = await client.put(
         uri,
-        headers: _mergeHeaders(headers, bearerToken),
-        body: jsonBody ?? (body != null ? jsonEncode(body) : null),
+        headers: mergedHeaders,
+        body: encodedBody,
+      );
+
+      _logResponse(
+        method: method,
+        url: uri.toString(),
+        statusCode: response.statusCode,
+        headers: response.headers,
+        body: response.body,
       );
       return NetworkResponse.fromHttpResponse(response);
     } catch (e) {
+      _logResponse(
+        method: method,
+        url: _joinUrl(baseAddress ?? baseUrl, endpoint),
+        error: e,
+      );
       return NetworkResponse.error(message: e.toString());
     }
   }
@@ -200,15 +344,29 @@ class NetworkService extends ChangeNotifier {
     Map<String, String>? headers,
     String? bearerToken,
   }) async {
+    const method = 'DELETE';
     try {
-      final uri = Uri.parse('${baseAddress ?? baseUrl}$endpoint');
+      final uri = Uri.parse(_joinUrl(baseAddress ?? baseUrl, endpoint));
+      final mergedHeaders = _mergeHeaders(headers, bearerToken);
 
-      final response = await client.delete(
-        uri,
-        headers: _mergeHeaders(headers, bearerToken),
+      _logRequest(method: method, url: uri.toString(), headers: mergedHeaders);
+
+      final response = await client.delete(uri, headers: mergedHeaders);
+
+      _logResponse(
+        method: method,
+        url: uri.toString(),
+        statusCode: response.statusCode,
+        headers: response.headers,
+        body: response.body,
       );
       return NetworkResponse.fromHttpResponse(response);
     } catch (e) {
+      _logResponse(
+        method: method,
+        url: _joinUrl(baseAddress ?? baseUrl, endpoint),
+        error: e,
+      );
       return NetworkResponse.error(message: e.toString());
     }
   }
@@ -222,16 +380,39 @@ class NetworkService extends ChangeNotifier {
     String? jsonBody,
     String? bearerToken,
   }) async {
+    const method = 'PATCH';
     try {
-      final uri = Uri.parse('${baseAddress ?? baseUrl}$endpoint');
+      final uri = Uri.parse(_joinUrl(baseAddress ?? baseUrl, endpoint));
+      final mergedHeaders = _mergeHeaders(headers, bearerToken);
+      final encodedBody = jsonBody ?? (body != null ? jsonEncode(body) : null);
+
+      _logRequest(
+        method: method,
+        url: uri.toString(),
+        headers: mergedHeaders,
+        body: encodedBody,
+      );
 
       final response = await client.patch(
         uri,
-        headers: _mergeHeaders(headers, bearerToken),
-        body: jsonBody ?? (body != null ? jsonEncode(body) : null),
+        headers: mergedHeaders,
+        body: encodedBody,
+      );
+
+      _logResponse(
+        method: method,
+        url: uri.toString(),
+        statusCode: response.statusCode,
+        headers: response.headers,
+        body: response.body,
       );
       return NetworkResponse.fromHttpResponse(response);
     } catch (e) {
+      _logResponse(
+        method: method,
+        url: _joinUrl(baseAddress ?? baseUrl, endpoint),
+        error: e,
+      );
       return NetworkResponse.error(message: e.toString());
     }
   }
@@ -283,8 +464,9 @@ class NetworkService extends ChangeNotifier {
     List<http.MultipartFile>? files,
     String? bearerToken,
   }) async {
+    const method = 'POST';
     try {
-      final uri = Uri.parse('${baseAddress ?? baseUrl}$endpoint');
+      final uri = Uri.parse(_joinUrl(baseAddress ?? baseUrl, endpoint));
 
       // Create multipart request
       final request = http.MultipartRequest('POST', uri);
@@ -303,12 +485,33 @@ class NetworkService extends ChangeNotifier {
         request.files.addAll(files);
       }
 
+      _logRequest(
+        method: method,
+        url: uri.toString(),
+        headers: mergedHeaders,
+        body:
+            'multipart fields: $fields, files: '
+            '${files?.map((f) => '${f.filename} (${f.contentType})').toList()}',
+      );
+
       // Send request
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
 
+      _logResponse(
+        method: method,
+        url: uri.toString(),
+        statusCode: response.statusCode,
+        headers: response.headers,
+        body: response.body,
+      );
       return NetworkResponse.fromHttpResponse(response);
     } catch (e) {
+      _logResponse(
+        method: method,
+        url: _joinUrl(baseAddress ?? baseUrl, endpoint),
+        error: e,
+      );
       return NetworkResponse.error(message: e.toString());
     }
   }
