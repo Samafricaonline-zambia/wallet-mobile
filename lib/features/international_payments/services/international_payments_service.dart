@@ -59,13 +59,22 @@ class InternationalPaymentsService extends ChangeNotifier {
       appLoaderService.updateIsLoading(true);
       //checkAccessToken();
 
+      final payload = {
+        "user_id":
+            appState.loggedInUser.value?.user.id.toStringAsFixed(0) ?? "",
+        "bearer_token": appState.accessToken,
+      };
+
       final NetworkResponse response = await networkService.post(
         InternationalPaymentsEndpoints.verifyTpin,
         baseAddress: kDebugMode ? uatAddress : prodAddress,
         bearerToken: appState.accessToken,
-        body: {},
+        body: payload,
       );
 
+      if (response.isSuccess) {
+        return "";
+      }
       return response.displayMessage;
     } catch (e) {
       return e.toString();
