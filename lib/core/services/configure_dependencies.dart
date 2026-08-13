@@ -10,9 +10,11 @@ import 'package:sampay_wallet/core/models/institutions.dart';
 import 'package:sampay_wallet/core/models/load_wallet_models/card.dart';
 import 'package:sampay_wallet/core/models/load_wallet_models/momo.dart';
 import 'package:sampay_wallet/core/models/registration_model.dart';
+import 'package:sampay_wallet/core/models/spend_distribution_model.dart';
 import 'package:sampay_wallet/core/models/wallet_balance_model.dart';
 import 'package:sampay_wallet/core/models/wallet_transactions_model.dart';
 import 'package:sampay_wallet/core/services/loader_service.dart';
+import 'package:sampay_wallet/core/utils/date_utils.dart';
 import 'package:sampay_wallet/features/bills/models/bill_item_model.dart';
 import 'package:sampay_wallet/features/bills/models/electricity_token_model.dart';
 import 'package:sampay_wallet/features/bills/services/bills_service.dart';
@@ -79,6 +81,11 @@ Future<void> configureDependencies() async {
     instanceName: "walletTransactions",
   );
 
+  getIt.registerSingleton<ValueNotifier<SpendDistributionModel?>>(
+    appState.spendDistributionTransactions,
+    instanceName: "spendDistributionTransactions",
+  );
+
   getIt.registerSingleton<ValueNotifier<List<InstitutionModel>>>(
     appState.allInstitutions,
     instanceName: "allInstitutions",
@@ -120,6 +127,14 @@ Future<void> configureDependencies() async {
   getIt.registerSingleton<ValueNotifier<int>>(
     reportsService.selectedTabIndex,
     instanceName: "selectedReportsTabIndex",
+  );
+  getIt.registerSingleton<ValueNotifier<int>>(
+    reportsService.selectedFilterIndex,
+    instanceName: "selectedFilterIndex",
+  );
+  getIt.registerSingleton<ValueNotifier<SimpleDateRange>>(
+    reportsService.selectedDateRange,
+    instanceName: "selectedDateRange",
   );
   getIt.registerSingleton<ValueNotifier<TransactionsModel?>>(
     reportsService.selectedTransaction,

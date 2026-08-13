@@ -8,6 +8,7 @@ import 'package:sampay_wallet/core/models/kyc_and_charges_model.dart';
 import 'package:sampay_wallet/core/models/load_wallet_models/card.dart';
 import 'package:sampay_wallet/core/models/load_wallet_models/momo.dart';
 import 'package:sampay_wallet/core/models/payment_request_model.dart';
+import 'package:sampay_wallet/core/models/spend_distribution_model.dart';
 import 'package:sampay_wallet/core/models/wallet_balance_model.dart';
 import 'package:sampay_wallet/core/models/wallet_transactions_model.dart';
 import 'package:sampay_wallet/core/services/loader_service.dart';
@@ -167,6 +168,52 @@ class WalletService {
         //walletBalance.value = WalletBalanceModel.fromJson(response.data);
         appState.updateWalletTransactions(
           WalletTransactionsModel.fromMap(response.data),
+        );
+      } else {
+        //walletBalance.value = null;
+        appState.updateWalletTransactions(null);
+      }
+
+      return response;
+    } catch (e) {
+      return NetworkResponse.error(message: e.toString());
+    } finally {
+      appLoaderService.updateIsLoading(false);
+    }
+  }
+
+  Future<NetworkResponse> fetchSpendDistribution(
+    String? period,
+    String? from,
+    String? to,
+  ) async {
+    try {
+      appLoaderService.updateIsLoading(true);
+
+      Map<String, String> queryParams = {};
+
+      if (period != null) {
+        queryParams.putIfAbsent("period", () => period);
+      }
+
+      if (from != null) {
+        queryParams.putIfAbsent("from", () => from);
+      }
+
+      if (to != null) {
+        queryParams.putIfAbsent("to", () => to);
+      }
+
+      final NetworkResponse response = await networkService.get(
+        ApiEndpoints.walletSpendDistribution,
+        bearerToken: appState.accessToken,
+        queryParameters: queryParams,
+      );
+
+      if (response.isSuccess) {
+        //walletBalance.value = WalletBalanceModel.fromJson(response.data);
+        appState.updateSpendAnalysisTransactions(
+          SpendDistributionModel.fromMap(response.data),
         );
       } else {
         //walletBalance.value = null;

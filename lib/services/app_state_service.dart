@@ -3,11 +3,11 @@ import 'package:sampay_wallet/core/constants/constants.dart';
 import 'package:sampay_wallet/core/constants/storage_keys.dart';
 import 'package:sampay_wallet/core/models/authentication_model.dart';
 import 'package:sampay_wallet/core/models/institutions.dart';
+import 'package:sampay_wallet/core/models/spend_distribution_model.dart';
 import 'package:sampay_wallet/core/models/wallet_balance_model.dart';
 import 'package:sampay_wallet/core/models/wallet_transactions_model.dart';
 import 'package:sampay_wallet/core/services/configure_dependencies.dart';
 import 'package:sampay_wallet/core/services/storage_service.dart';
-import 'package:sampay_wallet/core/utils/app_utils.dart';
 import 'package:sampay_wallet/core/utils/string_utils.dart';
 
 class AppStateService extends ChangeNotifier {
@@ -19,6 +19,8 @@ class AppStateService extends ChangeNotifier {
   ValueNotifier<WalletTransactionsModel?> walletTransactions = ValueNotifier(
     null,
   );
+  ValueNotifier<SpendDistributionModel?> spendDistributionTransactions =
+      ValueNotifier(null);
   ValueNotifier<List<InstitutionModel>> allInstitutions =
       ValueNotifier<List<InstitutionModel>>([]);
 
@@ -83,6 +85,12 @@ class AppStateService extends ChangeNotifier {
 
   void updateWalletTransactions(WalletTransactionsModel? value) {
     walletTransactions.value = value;
+
+    notifyListeners();
+  }
+
+  void updateSpendAnalysisTransactions(SpendDistributionModel? value) {
+    spendDistributionTransactions.value = value;
 
     notifyListeners();
   }

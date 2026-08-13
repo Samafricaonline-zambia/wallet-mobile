@@ -11,6 +11,7 @@ class SimpleDropDown extends StatefulWidget {
   final List<String> items;
   final String? initialValue;
   final String? Function(String?)? validator;
+  final bool triggerInitialValueChange;
   final void Function(String?)? onChanged;
   final void Function(String?)? onSubmitted;
   final void Function(String? value)? onValueChanged;
@@ -25,6 +26,7 @@ class SimpleDropDown extends StatefulWidget {
     this.icon,
     this.initialValue,
     this.validator,
+    this.triggerInitialValueChange = false,
     this.onChanged,
     this.onSubmitted,
     this.onValueChanged,
@@ -56,6 +58,11 @@ class _SimpleDropDownState extends State<SimpleDropDown> {
         _isFocused = _focusNode.hasFocus;
       });
     });
+
+    // Fire change callbacks once with the initial value on first build
+    if (widget.triggerInitialValueChange) {
+      handleOnChange(_selectedValue);
+    }
   }
 
   @override
