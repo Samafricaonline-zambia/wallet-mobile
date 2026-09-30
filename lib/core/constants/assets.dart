@@ -76,7 +76,7 @@ class AppAssets {
   static const String samticketsUrl = "https://www.samtickets.com/";
   static const String samgamingUrl = "https://samgaming.net/";
   static const String lionZoneUrl = "https://www.lionzone.biz/";
-  static const String samfinUrl = "https://www.samfingroup.com";
+  static const String samfinUrl = "https://samfingroup.com/";
   static const String sampayBusinessUrl =
       "https://samafricaonline.com/sam_pay/public/businesscenter";
 

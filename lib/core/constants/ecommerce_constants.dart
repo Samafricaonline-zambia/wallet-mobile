@@ -15,19 +15,14 @@ class EcommerceConstants {
   // Static list of all ecommerce options
   static final List<EcommerceModel> ecommerceOptions = [
     EcommerceModel(
-      image: AppAssets.sambeziLogo,
-      link: AppAssets.sambeziUrl,
-      title: "Sambezi",
+      image: AppAssets.samshopLogo,
+      link: AppAssets.samshopUrl,
+      title: "Samshop",
     ),
     EcommerceModel(
       image: AppAssets.samrentLogo,
       link: AppAssets.samrentUrl,
       title: "Samrent",
-    ),
-    EcommerceModel(
-      image: AppAssets.samshopLogo,
-      link: AppAssets.samshopUrl,
-      title: "Samshop",
     ),
     EcommerceModel(
       image: AppAssets.sammembershipLogo,
@@ -48,16 +43,6 @@ class EcommerceConstants {
       image: AppAssets.sameatsLogo,
       link: AppAssets.sameatsUrl,
       title: "Sameats",
-    ),
-    EcommerceModel(
-      image: AppAssets.samticketsLogo,
-      link: AppAssets.samticketsUrl,
-      title: "Samtickets",
-    ),
-    EcommerceModel(
-      image: AppAssets.samgamingLogo,
-      link: AppAssets.samgamingUrl,
-      title: "Samgaming",
     ),
     EcommerceModel(
       image: AppAssets.lionZoneLogo,
