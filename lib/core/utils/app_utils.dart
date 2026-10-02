@@ -7,6 +7,7 @@ import 'dart:math';
 import 'package:sampay_wallet/core/constants/assets.dart';
 import 'package:sampay_wallet/core/constants/constants.dart';
 import 'package:sampay_wallet/core/models/institutions.dart';
+import 'package:sampay_wallet/core/models/wallet_transactions_model.dart';
 import 'package:sampay_wallet/core/themes/color_constants.dart';
 import 'package:sampay_wallet/core/utils/string_utils.dart';
 import 'package:sampay_wallet/core/widgets/simple_app_text.dart';
@@ -750,5 +751,58 @@ class AppUtils {
       debugPrint('Error formatting date: $e');
       return isoDate;
     }
+  }
+
+  /// Parses the transaction date (prefers `timestamp`, falls back to `date`)
+  ///
+  /// Returns `null` if neither field is present or parseable.
+  DateTime? parseTransactionDate(TransactionsModel transaction) {
+    if (transaction.timestamp != null && transaction.timestamp!.isNotEmpty) {
+      final parsed = DateTime.tryParse(
+        transaction.timestamp!.replaceFirst(' ', 'T'),
+      );
+      if (parsed != null) return parsed;
+    }
+
+    if (transaction.date != null && transaction.date!.isNotEmpty) {
+      return DateTime.tryParse(transaction.date!);
+    }
+
+    return null;
+  }
+
+  /// Filters a list of transactions to those falling within [fromDate] and
+  /// [toDate] (inclusive), both as `yyyy-MM-dd` strings.
+  ///
+  /// Returns an empty list when [transactions] is null. Transactions whose
+  /// date cannot be parsed are excluded. If either [fromDate] or [toDate] is
+  /// invalid, the whole list is returned unfiltered.
+  List<TransactionsModel> filterTransactions(
+    List<TransactionsModel>? transactions,
+    String fromDate,
+    String toDate,
+  ) {
+    if (transactions == null || transactions.isEmpty) return [];
+
+    final DateTime? from = DateTime.tryParse(fromDate);
+    final DateTime? to = DateTime.tryParse(toDate);
+
+    // Invalid range bounds -> return unfiltered list.
+    if (from == null || to == null) return transactions;
+
+    // Normalize bounds to start/end of day so comparisons are inclusive.
+    final DateTime start = DateTime(from.year, from.month, from.day);
+    final DateTime end = DateTime(
+      to.year,
+      to.month,
+      to.day,
+    ).add(const Duration(days: 1));
+
+    return transactions.where((transaction) {
+      final DateTime? transactionDate = parseTransactionDate(transaction);
+      if (transactionDate == null) return false;
+
+      return transactionDate.isAfter(start) && transactionDate.isBefore(end);
+    }).toList();
   }
 }

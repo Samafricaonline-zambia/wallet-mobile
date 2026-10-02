@@ -35,7 +35,7 @@ class WalletTransactionsModel {
       'status': status,
       'message': message,
       'totalTransactions': totalTransactions,
-      'transactions': transactions?.map((x) => x?.toMap())?.toList(),
+      'transactions': transactions?.map((x) => x.toMap()).toList(),
     };
   }
 

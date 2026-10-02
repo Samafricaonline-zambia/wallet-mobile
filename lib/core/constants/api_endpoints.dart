@@ -16,6 +16,7 @@ class ApiEndpoints {
   static const String walletGetNrc = '/wallet/nrc';
   static const String walletVerify = '/verify';
   static const String walletTransactionHistory = '/wallet/transactionHistory';
+  static const String walletSpendDistribution = '/wallet/spend-distribution';
   static const String walletTransferHistory = '/wallet/transfer-history';
   static const String walletFundMomo = '/wallet/fund/momo';
   static const String walletFundCard = '/wallet/fund/card';
